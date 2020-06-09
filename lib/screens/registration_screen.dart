@@ -6,13 +6,20 @@ import 'package:bloodbank/components/rounded_button.dart';
 import 'package:bloodbank/components/rounded_dropdownbutton.dart';
 import 'package:bloodbank/components/date_button.dart';
 
+List<String> bloodTypeList = ['A', 'B'];
+List<String> citiesList = ['Giza', 'Cairo'];
+List<String> regionList = ['Haram', 'dd'];
+
 class RegistrationScreen extends StatefulWidget {
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  final String id = 'LogInScreen';
+  final String id = 'RegistrationId';
+  String region;
+  String city;
+  String bloodType;
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +79,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       colour: Colors.white,
                       hint: 'Blood type',
                       icon: Icons.invert_colors,
-                      borderColor: Color(0xFF9a0b0b),
+                      borderColor: Colors.redAccent,
                       hintColor: Colors.grey,
+                      value: bloodType,
+                      list: bloodTypeList,
+                      onChange: (value) {
+                        setState(() {
+                          bloodType = value;
+                        });
+                      },
                     ),
                     SizedBox(
                       height: 15.0,
@@ -86,20 +100,35 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     RoundedBorderDropdown(
                       colour: Colors.white,
-                      hint: 'Select city',
-                      icon: Icons.home,
-                      borderColor: Color(0xFF9a0b0b),
+                      borderColor: Colors.redAccent,
                       hintColor: Colors.grey,
+                      list: citiesList,
+                      value: city,
+                      icon: Icons.home,
+                      hint: 'Select City',
+                      onChange: (value) {
+                        setState(() {
+                          city = value;
+                        });
+                      },
                     ),
                     SizedBox(
                       height: 15.0,
                     ),
+                    //region
                     RoundedBorderDropdown(
                       colour: Colors.white,
-                      hint: 'Select region',
-                      icon: Icons.home,
-                      borderColor: Color(0xFF9a0b0b),
+                      borderColor: Colors.redAccent,
                       hintColor: Colors.grey,
+                      list: regionList,
+                      value: region,
+                      icon: Icons.home,
+                      hint: 'Select Region',
+                      onChange: (value) {
+                        setState(() {
+                          region = value;
+                        });
+                      },
                     ),
                     SizedBox(
                       height: 15.0,

@@ -1,3 +1,5 @@
+import 'package:bloodbank/screens/more_screen.dart';
+import 'package:bloodbank/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:bloodbank/screens/home_screen.dart';
@@ -10,9 +12,9 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screensBody = [
     HomeScreen(),
+    ProfileScreen(),
     Container(),
-    Container(),
-    Container(),
+    MoreScreen(),
   ];
   int _currentIndex = 0;
 
@@ -54,7 +56,7 @@ class _MainScreenState extends State<MainScreen> {
               )),
           BottomNavyBarItem(
               activeColor: Colors.white,
-              title: Text('Extra', style: TextStyle(color: Colors.white)),
+              title: Text('More', style: TextStyle(color: Colors.white)),
               icon: Icon(
                 Icons.more_horiz,
                 color: Colors.white,

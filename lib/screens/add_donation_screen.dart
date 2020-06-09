@@ -7,6 +7,7 @@ import 'package:bloodbank/components/rounded_button.dart';
 import 'package:provider/provider.dart';
 import 'package:bloodbank/utilities/donation_data.dart';
 import 'package:bloodbank/screens/show_map_screen.dart';
+import 'package:bloodbank/components/rounded_dropdownbutton.dart';
 
 List<String> bloodTypeList = ['A', 'B'];
 List<String> citiesList = ['Giza', 'Cairo'];
@@ -101,59 +102,20 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
                       height: 15.0,
                     ),
                     //BloodType
-                    Container(
-                        width: 500,
-                        height: 50.0,
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFE9E9E9),
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: Icon(
-                                Icons.invert_colors,
-                                color: Color(0xFF9a0b0b),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 7,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 12.0),
-                                child: DropdownButton(
-                                  isExpanded: true,
-                                  elevation: 5,
-                                  icon: Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 30,
-                                    color: Color(0xFF9a0b0b),
-                                  ),
-                                  hint: Text('Blood type',
-                                      style: TextStyle(
-                                          color: Color(0xFF9a0b0b),
-                                          fontSize: 15)),
-                                  items: bloodTypeList
-                                      .map((value) => DropdownMenuItem(
-                                            child: Text(
-                                              value,
-                                            ),
-                                            value: value,
-                                          ))
-                                      .toList(),
-                                  onChanged: (String value) {
-                                    setState(() {
-                                      bloodType = value;
-                                    });
-                                  },
-                                  value: bloodType,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )),
+                    RoundedBorderDropdown(
+                      hint: 'Blood type',
+                      icon: Icons.invert_colors,
+                      colour: Color(0xFFE9E9E9),
+                      borderColor: Color(0xFFE9E9E9),
+                      hintColor: Color(0xFF9a0b0b),
+                      value: bloodType,
+                      list: bloodTypeList,
+                      onChange: (value) {
+                        setState(() {
+                          bloodType = value;
+                        });
+                      },
+                    ),
                     SizedBox(
                       height: 15.0,
                     ),
@@ -206,116 +168,38 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
                       height: 15.0,
                     ),
                     //City
-                    Container(
-                        width: 500,
-                        height: 50.0,
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFE9E9E9),
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: Icon(
-                                Icons.home,
-                                color: Color(0xFF9a0b0b),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 7,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 12.0),
-                                child: DropdownButton(
-                                  isExpanded: true,
-                                  elevation: 5,
-                                  icon: Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 30,
-                                    color: Color(0xFF9a0b0b),
-                                  ),
-                                  hint: Text('Select City',
-                                      style: TextStyle(
-                                          color: Color(0xFF9a0b0b),
-                                          fontSize: 15)),
-                                  items: citiesList
-                                      .map((value) => DropdownMenuItem(
-                                            child: Text(
-                                              value,
-                                            ),
-                                            value: value,
-                                          ))
-                                      .toList(),
-                                  onChanged: (String value) {
-                                    setState(() {
-                                      city = value;
-                                    });
-                                  },
-                                  value: city,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )),
+                    RoundedBorderDropdown(
+                      colour: Color(0xFFE9E9E9),
+                      borderColor: Color(0xFFE9E9E9),
+                      hintColor: Color(0xFF9a0b0b),
+                      list: citiesList,
+                      value: city,
+                      icon: Icons.home,
+                      hint: 'Select City',
+                      onChange: (value) {
+                        setState(() {
+                          city = value;
+                        });
+                      },
+                    ),
                     SizedBox(
                       height: 15.0,
                     ),
                     //region
-                    Container(
-                        width: 500,
-                        height: 50.0,
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFE9E9E9),
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: Icon(
-                                Icons.home,
-                                color: Color(0xFF9a0b0b),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 7,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 12.0),
-                                child: DropdownButton(
-                                  isExpanded: true,
-                                  elevation: 5,
-                                  icon: Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 30,
-                                    color: Color(0xFF9a0b0b),
-                                  ),
-                                  hint: Text('Select Region',
-                                      style: TextStyle(
-                                          color: Color(0xFF9a0b0b),
-                                          fontSize: 15)),
-                                  items: regionList
-                                      .map((value) => DropdownMenuItem(
-                                            child: Text(
-                                              value,
-                                            ),
-                                            value: value,
-                                          ))
-                                      .toList(),
-                                  onChanged: (String value) {
-                                    setState(() {
-                                      region = value;
-                                    });
-                                  },
-                                  value: region,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )),
+                    RoundedBorderDropdown(
+                      colour: Color(0xFFE9E9E9),
+                      borderColor: Color(0xFFE9E9E9),
+                      hintColor: Color(0xFF9a0b0b),
+                      list: regionList,
+                      value: region,
+                      icon: Icons.home,
+                      hint: 'Select Region',
+                      onChange: (value) {
+                        setState(() {
+                          region = value;
+                        });
+                      },
+                    ),
                     SizedBox(
                       height: 15.0,
                     ),

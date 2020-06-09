@@ -8,10 +8,6 @@ import 'package:bloodbank/utilities/donation_data.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-List<String> bloodTypeList = ['A', 'B'];
-List<String> citiesList = ['Giza', 'Cairo'];
-List<String> regionList = ['Haram', 'dd'];
-
 class ShowDonationScreen extends StatelessWidget {
   final int donationIndex;
   ShowDonationScreen(this.donationIndex);

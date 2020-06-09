@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 
-List<String> list = ['first', 'second'];
-
-class RoundedBorderDropdown extends StatefulWidget {
+class RoundedBorderDropdown extends StatelessWidget {
   final String hint;
   final Color colour;
   final IconData icon;
   final Color hintColor;
   final Color borderColor;
+  final List list;
+  final Function onChange;
+  final String value;
+  final Color textColor;
 
   RoundedBorderDropdown(
-      {this.hint, this.colour, this.icon, this.hintColor, this.borderColor});
+      {this.hint,
+      this.colour,
+      this.icon,
+      this.hintColor,
+      this.borderColor,
+      this.list,
+      this.value,
+      this.onChange,
+      this.textColor});
 
-  @override
-  _RoundedBorderDropdownState createState() => _RoundedBorderDropdownState();
-}
-
-class _RoundedBorderDropdownState extends State<RoundedBorderDropdown> {
-  final List<String> dropdownValues = list;
-  String val;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,10 +29,10 @@ class _RoundedBorderDropdownState extends State<RoundedBorderDropdown> {
         height: 50.0,
         padding: EdgeInsets.symmetric(vertical: 16.0),
         decoration: BoxDecoration(
-          color: widget.colour,
+          color: colour,
           borderRadius: BorderRadius.circular(30.0),
-//          border: Border.all(
-//              color: widget.borderColor, style: BorderStyle.solid, width: 0.80),
+          border: Border.all(
+              color: borderColor, style: BorderStyle.solid, width: 0.80),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -37,7 +40,7 @@ class _RoundedBorderDropdownState extends State<RoundedBorderDropdown> {
             Expanded(
               flex: 1,
               child: Icon(
-                widget.icon,
+                icon,
                 color: Color(0xFF9a0b0b),
               ),
             ),
@@ -53,22 +56,19 @@ class _RoundedBorderDropdownState extends State<RoundedBorderDropdown> {
                     size: 30,
                     color: Color(0xFF9a0b0b),
                   ),
-                  hint: Text(widget.hint,
-                      style: TextStyle(color: widget.hintColor, fontSize: 15)),
-                  items: dropdownValues
+                  hint: Text(hint,
+                      style: TextStyle(color: hintColor, fontSize: 15)),
+                  items: list
                       .map((value) => DropdownMenuItem(
                             child: Text(
                               value,
+                              style: TextStyle(color: textColor),
                             ),
                             value: value,
                           ))
                       .toList(),
-                  onChanged: (String value) {
-                    setState(() {
-                      val = value;
-                    });
-                  },
-                  value: val,
+                  onChanged: onChange,
+                  value: value,
 //          value: dropdownValues.first,
                 ),
               ),
