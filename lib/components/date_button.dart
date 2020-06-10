@@ -4,26 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 
-class RoundedDateButton extends StatefulWidget {
-  RoundedDateButton({
-    this.title,
-  });
+class RoundedDateButton extends StatelessWidget {
+  RoundedDateButton({this.title, this.onChanged});
 
   final String title;
+  final Function onChanged;
 
-  @override
-  _RoundedDateButtonState createState() => _RoundedDateButtonState();
-}
-
-class _RoundedDateButtonState extends State<RoundedDateButton> {
   final dateFormat = DateFormat("dd/MM/yyyy");
-  DateTime date;
 
   @override
   Widget build(BuildContext context) {
     return DateTimeField(
+        onChanged: onChanged,
         decoration: kTextFieldDecorationWhite.copyWith(
-            hintText: widget.title,
+            hintText: title,
             prefixIcon: Icon(
               Icons.calendar_today,
               color: Color(0xFF9a0b0b),

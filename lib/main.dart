@@ -1,4 +1,5 @@
 import 'package:bloodbank/utilities/donation_data.dart';
+import 'package:bloodbank/utilities/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:bloodbank/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => DonationData(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UserData(),
         )
       ],
       child: MaterialApp(

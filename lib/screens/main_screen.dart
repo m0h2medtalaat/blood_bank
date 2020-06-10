@@ -5,21 +5,24 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:bloodbank/screens/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
+  final int indexOfUser;
+  MainScreen({this.indexOfUser});
+
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final List<Widget> _screensBody = [
-    HomeScreen(),
-    ProfileScreen(),
-    Container(),
-    MoreScreen(),
-  ];
   int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _screensBody = [
+      HomeScreen(),
+      ProfileScreen(indexOfUser: widget.indexOfUser),
+      Container(),
+      MoreScreen(),
+    ];
     return Scaffold(
       body: _screensBody[_currentIndex],
       bottomNavigationBar: BottomNavyBar(

@@ -1,25 +1,35 @@
 import 'package:bloodbank/utilities/constants.dart';
+import 'package:bloodbank/utilities/user.dart';
+import 'package:bloodbank/utilities/user_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:bloodbank/components/rounded_button.dart';
 import 'package:bloodbank/components/rounded_dropdownbutton.dart';
 import 'package:bloodbank/components/date_button.dart';
+import 'package:provider/provider.dart';
 
 List<String> bloodTypeList = ['A', 'B'];
 List<String> citiesList = ['Giza', 'Cairo'];
 List<String> regionList = ['Haram', 'dd'];
 
 class RegistrationScreen extends StatefulWidget {
+  final String id = 'RegistrationId';
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  final String id = 'RegistrationId';
+  String name;
+  String email;
+  String birthday;
+  String bloodType;
+  String lastDonationDate;
   String region;
   String city;
-  String bloodType;
+  String phoneNum;
+  String password;
+  String rePassword;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +58,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       height: 50.0,
                     ),
                     TextField(
+                      onChanged: (value) {
+                        name = value;
+                      },
                       decoration: kTextFieldDecorationWhite.copyWith(
                           hintText: 'Name',
                           prefixIcon: Icon(
@@ -59,6 +72,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       height: 15.0,
                     ),
                     TextField(
+                      onChanged: (value) {
+                        email = value;
+                      },
                       decoration: kTextFieldDecorationWhite.copyWith(
                           hintText: 'Email',
                           prefixIcon: Icon(
@@ -71,6 +87,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     RoundedDateButton(
                       title: 'Birthday',
+                      onChanged: (value) {
+                        birthday = "${value.toLocal()}".split(' ')[0];
+                        print("${value.toLocal()}".split(' ')[0]);
+                      },
                     ),
                     SizedBox(
                       height: 15.0,
@@ -94,6 +114,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     RoundedDateButton(
                       title: 'Last donation date',
+                      onChanged: (value) {
+                        lastDonationDate = "${value.toLocal()}".split(' ')[0];
+                        print("${value.toLocal()}".split(' ')[0]);
+                      },
                     ),
                     SizedBox(
                       height: 15.0,
@@ -134,6 +158,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       height: 15.0,
                     ),
                     TextField(
+                      onChanged: (value) {
+                        phoneNum = value;
+                      },
                       decoration: kTextFieldDecorationWhite.copyWith(
                           hintText: 'Phone Number',
                           prefixIcon: Icon(
@@ -145,6 +172,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       height: 15.0,
                     ),
                     TextField(
+                      onChanged: (value) {
+                        password = value;
+                      },
                       obscureText: true,
                       decoration: kTextFieldDecorationWhite.copyWith(
                           hintText: 'Password',
@@ -157,6 +187,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       height: 15.0,
                     ),
                     TextField(
+                      onChanged: (value) {
+                        rePassword = value;
+                      },
                       obscureText: true,
                       decoration: kTextFieldDecorationWhite.copyWith(
                           hintText: 're-Password',
@@ -173,6 +206,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       colour: Colors.white,
                       textColor: Color(0xFF9a0b0b),
                       onPressed: () {
+                        Provider.of<UserData>(context, listen: false).register(
+                            User(
+                                name: name,
+                                phoneNum: phoneNum,
+                                city: city,
+                                region: region,
+                                bloodType: bloodType,
+                                birthday: birthday,
+                                email: email,
+                                lastDonationDate: lastDonationDate,
+                                password: password,
+                                rePassword: rePassword));
+                        print('Added email = $email , pw =$password');
                         Navigator.pop(context);
                       },
                     )

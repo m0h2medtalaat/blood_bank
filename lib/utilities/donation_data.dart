@@ -4,11 +4,6 @@ import 'package:bloodbank/utilities/donation.dart';
 class DonationData extends ChangeNotifier {
   List<Donation> donations = [];
 
-//  void updateArticle(Donation article) {
-//    article.toggleDone();
-//    notifyListeners();
-//  }
-//
   int getIndex(Donation donation) {
     return donations.indexOf(donation);
   }
@@ -16,9 +11,5 @@ class DonationData extends ChangeNotifier {
   void addDonation(Donation donation) {
     donations.add(donation);
     notifyListeners();
-  }
-
-  int getCurrentAddIndex() {
-    return donations.length;
   }
 }
