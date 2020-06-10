@@ -1,42 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:bloodbank/components/rounded_searchbar.dart';
 import 'package:bloodbank/screens/show_article_screen.dart';
 import 'package:bloodbank/utilities/article_data.dart';
 import 'package:bloodbank/utilities/article.dart';
 import 'package:provider/provider.dart';
-
-class ArticlesScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: RoundedSearchBar(),
-        ),
-        Expanded(
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return ArticleWidget(
-                        Provider.of<ArticleData>(context, listen: true)
-                            .articles[index]);
-                  },
-                  childCount: Provider.of<ArticleData>(context, listen: true)
-                      .articles
-                      .length,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class ArticleWidget extends StatelessWidget {
   final Article _article;

@@ -2,26 +2,24 @@ import 'package:bloodbank/screens/fav_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:bloodbank/screens/contactus_screen.dart';
+import 'package:bloodbank/screens/aboutapp_screen.dart';
+import 'package:bloodbank/screens/logout_screen.dart';
 
 class MoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Stack(
-          children: <Widget>[
-            Center(
-              child: Text('More'),
-            ),
-          ],
+        title: Center(
+          child: Text('More'),
         ),
         backgroundColor: Color(0xFF9a0b0b),
       ),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverFixedExtentList(
-            itemExtent: 800.0,
+            itemExtent: 600.0,
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 return Container(
@@ -31,6 +29,7 @@ class MoreScreen extends StatelessWidget {
                         EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
                     child: SafeArea(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Container(
                             height: 100,
@@ -42,27 +41,52 @@ class MoreScreen extends StatelessWidget {
                             MyListTile(
                               title: 'Favorites',
                               icon: Icons.favorite,
-                              screen: FavScreen(),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FavScreen()));
+                              },
                             ),
                             MyListTile(
-                              title: 'Contact Us',
-                              icon: Icons.mail,
-                              screen: FavScreen(),
-                            ),
+                                title: 'Contact Us',
+                                icon: Icons.mail,
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ContactUsScreen()));
+                                }),
                             MyListTile(
-                              title: 'About App',
-                              icon: Icons.help,
-                              screen: FavScreen(),
-                            ),
+                                title: 'About Application',
+                                icon: Icons.help,
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AboutAppScreen()));
+                                }),
                             MyListTile(
                               title: 'Notification Settings',
                               icon: Icons.notifications,
-                              screen: FavScreen(),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FavScreen()));
+                              },
                             ),
                             MyListTile(
                               title: 'Logout',
                               icon: Icons.exit_to_app,
-                              screen: FavScreen(),
+                              onTap: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => LogoutScreen());
+                              },
                             )
                           ])
                         ],
@@ -83,16 +107,13 @@ class MoreScreen extends StatelessWidget {
 class MyListTile extends StatelessWidget {
   final String title;
   final IconData icon;
-  final screen;
-  MyListTile({this.title, this.icon, this.screen});
+  final Function onTap;
+  MyListTile({this.title, this.icon, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => screen));
-      },
+      onTap: onTap,
       child: Card(
         color: Colors.white,
         child: ListTile(

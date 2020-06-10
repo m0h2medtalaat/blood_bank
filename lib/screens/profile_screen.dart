@@ -31,16 +31,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     User _user = Provider.of<UserData>(context).users[widget.indexOfUser];
-//    String name = 'Mohamed mahrous';
-//    String email = 'mohamed@yahoo.com';
-//    String birthday = '1/9/1995';
-//    String bloodType = 'A';
-//    String lastDonationDate = '1/9/2015';
-//    String region = 'Haram';
-//    String city = 'Giza';
-//    String phoneNum = '+5215222';
-//    String password = '123456';
-//    String rePassword = '123456';
 
     return Scaffold(
       appBar: AppBar(
