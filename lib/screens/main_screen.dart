@@ -5,8 +5,8 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:bloodbank/screens/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  final int indexOfUser;
-  MainScreen({this.indexOfUser});
+  final String apiToken;
+  MainScreen({this.apiToken});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -19,7 +19,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final List<Widget> _screensBody = [
       HomeScreen(),
-      ProfileScreen(indexOfUser: widget.indexOfUser),
+      ProfileScreen(apiToken: widget.apiToken),
       Container(),
       MoreScreen(),
     ];

@@ -8,6 +8,7 @@ import 'package:bloodbank/components/rounded_button.dart';
 import 'package:bloodbank/components/rounded_dropdownbutton.dart';
 import 'package:bloodbank/components/date_button.dart';
 import 'package:provider/provider.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 List<String> bloodTypeList = ['A', 'B'];
 List<String> citiesList = ['Giza', 'Cairo'];
@@ -34,199 +35,211 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          constraints: BoxConstraints.expand(),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('resources/back_ground.jpg'),
-                  fit: BoxFit.cover)),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
-            child: SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Sign up',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25.0),
-                    ),
-                    SizedBox(
-                      height: 50.0,
-                    ),
-                    TextField(
-                      onChanged: (value) {
-                        name = value;
-                      },
-                      decoration: kTextFieldDecorationWhite.copyWith(
-                          hintText: 'Name',
-                          prefixIcon: Icon(
-                            Icons.perm_identity,
-                            color: Color(0xFF9a0b0b),
-                          )),
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    TextField(
-                      onChanged: (value) {
-                        email = value;
-                      },
-                      decoration: kTextFieldDecorationWhite.copyWith(
-                          hintText: 'Email',
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: Color(0xFF9a0b0b),
-                          )),
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    RoundedDateButton(
-                      title: 'Birthday',
-                      onChanged: (value) {
-                        birthday = "${value.toLocal()}".split(' ')[0];
-                        print("${value.toLocal()}".split(' ')[0]);
-                      },
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    RoundedBorderDropdown(
-                      colour: Colors.white,
-                      hint: 'Blood type',
-                      icon: Icons.invert_colors,
-                      borderColor: Colors.redAccent,
-                      hintColor: Colors.grey,
-                      value: bloodType,
-                      list: bloodTypeList,
-                      onChange: (value) {
-                        setState(() {
-                          bloodType = value;
-                        });
-                      },
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    RoundedDateButton(
-                      title: 'Last donation date',
-                      onChanged: (value) {
-                        lastDonationDate = "${value.toLocal()}".split(' ')[0];
-                        print("${value.toLocal()}".split(' ')[0]);
-                      },
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    RoundedBorderDropdown(
-                      colour: Colors.white,
-                      borderColor: Colors.redAccent,
-                      hintColor: Colors.grey,
-                      list: citiesList,
-                      value: city,
-                      icon: Icons.home,
-                      hint: 'Select City',
-                      onChange: (value) {
-                        setState(() {
-                          city = value;
-                        });
-                      },
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    //region
-                    RoundedBorderDropdown(
-                      colour: Colors.white,
-                      borderColor: Colors.redAccent,
-                      hintColor: Colors.grey,
-                      list: regionList,
-                      value: region,
-                      icon: Icons.home,
-                      hint: 'Select Region',
-                      onChange: (value) {
-                        setState(() {
-                          region = value;
-                        });
-                      },
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    TextField(
-                      onChanged: (value) {
-                        phoneNum = value;
-                      },
-                      decoration: kTextFieldDecorationWhite.copyWith(
-                          hintText: 'Phone Number',
-                          prefixIcon: Icon(
-                            Icons.phone,
-                            color: Color(0xFF9a0b0b),
-                          )),
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    TextField(
-                      onChanged: (value) {
-                        password = value;
-                      },
-                      obscureText: true,
-                      decoration: kTextFieldDecorationWhite.copyWith(
-                          hintText: 'Password',
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Color(0xFF9a0b0b),
-                          )),
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    TextField(
-                      onChanged: (value) {
-                        rePassword = value;
-                      },
-                      obscureText: true,
-                      decoration: kTextFieldDecorationWhite.copyWith(
-                          hintText: 're-Password',
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Color(0xFF9a0b0b),
-                          )),
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    RoundedButton(
-                      title: 'Sign up',
-                      colour: Colors.white,
-                      textColor: Color(0xFF9a0b0b),
-                      onPressed: () {
-                        Provider.of<UserData>(context, listen: false).register(
-                            User(
-                                name: name,
-                                phoneNum: phoneNum,
-                                city: city,
-                                region: region,
-                                bloodType: bloodType,
-                                birthday: birthday,
-                                email: email,
-                                lastDonationDate: lastDonationDate,
-                                password: password,
-                                rePassword: rePassword));
-                        print('Added email = $email , pw =$password');
-                        Navigator.pop(context);
-                      },
-                    )
-                  ],
+      body: ModalProgressHUD(
+        inAsyncCall:
+            Provider.of<UserData>(context, listen: true).spinningStatus,
+        child: Container(
+            constraints: BoxConstraints.expand(),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('resources/back_ground.jpg'),
+                    fit: BoxFit.cover)),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
+              child: SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Sign up',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25.0),
+                      ),
+                      SizedBox(
+                        height: 50.0,
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          name = value;
+                        },
+                        decoration: kTextFieldDecorationWhite.copyWith(
+                            hintText: 'Name',
+                            prefixIcon: Icon(
+                              Icons.perm_identity,
+                              color: Color(0xFF9a0b0b),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          email = value;
+                        },
+                        decoration: kTextFieldDecorationWhite.copyWith(
+                            hintText: 'Email',
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Color(0xFF9a0b0b),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      RoundedDateButton(
+                        title: 'Birthday',
+                        onChanged: (value) {
+                          birthday = "${value.toLocal()}".split(' ')[0];
+                          print("${value.toLocal()}".split(' ')[0]);
+                        },
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      RoundedBorderDropdown(
+                        colour: Colors.white,
+                        hint: 'Blood type',
+                        icon: Icons.invert_colors,
+                        borderColor: Colors.redAccent,
+                        hintColor: Colors.grey,
+                        value: bloodType,
+                        list: bloodTypeList,
+                        onChange: (value) {
+                          setState(() {
+                            bloodType = value;
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      RoundedDateButton(
+                        title: 'Last donation date',
+                        onChanged: (value) {
+                          lastDonationDate = "${value.toLocal()}".split(' ')[0];
+                          print("${value.toLocal()}".split(' ')[0]);
+                        },
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      RoundedBorderDropdown(
+                        colour: Colors.white,
+                        borderColor: Colors.redAccent,
+                        hintColor: Colors.grey,
+                        list: citiesList,
+                        value: city,
+                        icon: Icons.home,
+                        hint: 'Select City',
+                        onChange: (value) {
+                          setState(() {
+                            city = value;
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      //region
+                      RoundedBorderDropdown(
+                        colour: Colors.white,
+                        borderColor: Colors.redAccent,
+                        hintColor: Colors.grey,
+                        list: regionList,
+                        value: region,
+                        icon: Icons.home,
+                        hint: 'Select Region',
+                        onChange: (value) {
+                          setState(() {
+                            region = value;
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          phoneNum = value;
+                        },
+                        decoration: kTextFieldDecorationWhite.copyWith(
+                            hintText: 'Phone Number',
+                            prefixIcon: Icon(
+                              Icons.phone,
+                              color: Color(0xFF9a0b0b),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          password = value;
+                        },
+                        obscureText: true,
+                        decoration: kTextFieldDecorationWhite.copyWith(
+                            hintText: 'Password',
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: Color(0xFF9a0b0b),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          rePassword = value;
+                        },
+                        obscureText: true,
+                        decoration: kTextFieldDecorationWhite.copyWith(
+                            hintText: 're-Password',
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: Color(0xFF9a0b0b),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      RoundedButton(
+                        title: 'Sign up',
+                        colour: Colors.white,
+                        textColor: Color(0xFF9a0b0b),
+                        onPressed: () async {
+                          try {
+                            String apiToken = await Provider.of<UserData>(
+                                    context,
+                                    listen: false)
+                                .register(User(
+                                    name: name,
+                                    phoneNum: phoneNum,
+                                    city: city,
+                                    region: region,
+                                    bloodType: bloodType,
+                                    birthday: birthday,
+                                    email: email,
+                                    lastDonationDate: lastDonationDate,
+                                    password: password,
+                                    rePassword: rePassword));
+                            if (apiToken != null) {
+                              print('Added email = $email , pw =$password');
+                              Navigator.pop(context);
+                            }
+                          } catch (e) {
+                            print(e);
+                          }
+                        },
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          )),
+            )),
+      ),
     );
   }
 }

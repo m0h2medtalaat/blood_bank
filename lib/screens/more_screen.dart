@@ -1,4 +1,5 @@
 import 'package:bloodbank/screens/fav_screen.dart';
+import 'package:bloodbank/screens/notification_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -75,7 +76,8 @@ class MoreScreen extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => FavScreen()));
+                                        builder: (context) =>
+                                            NotificationScreen()));
                               },
                             ),
                             MyListTile(

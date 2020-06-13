@@ -13,8 +13,8 @@ List<String> citiesList = ['Giza', 'Cairo'];
 List<String> regionList = ['Haram', 'dd'];
 
 class ProfileScreen extends StatefulWidget {
-  final int indexOfUser;
-  ProfileScreen({this.indexOfUser});
+  final String apiToken;
+  ProfileScreen({this.apiToken});
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -30,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    User _user = Provider.of<UserData>(context).users[widget.indexOfUser];
+    User _user = Provider.of<UserData>(context).users[0];
 
     return Scaffold(
       appBar: AppBar(
@@ -279,8 +279,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               textColor = Color(0xFF9a0b0b);
                                               Provider.of<UserData>(context,
                                                       listen: false)
-                                                  .edit(_user,
-                                                      widget.indexOfUser);
+                                                  .edit(_user, widget.apiToken);
                                               print('Edit Done ');
                                             });
                                             Navigator.pop(context);

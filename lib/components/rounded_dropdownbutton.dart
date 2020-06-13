@@ -49,6 +49,7 @@ class RoundedBorderDropdown extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(right: 12.0),
                 child: DropdownButton(
+                  underline: SizedBox(),
                   isExpanded: true,
                   elevation: 5,
                   icon: Icon(
