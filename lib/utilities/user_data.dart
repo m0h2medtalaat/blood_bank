@@ -4,15 +4,15 @@ import 'package:bloodbank/utilities/apis.dart';
 
 class UserData extends ChangeNotifier {
   bool spinningStatus = false;
+  User currentUser;
   List<User> users = [
     User(
         name: 'admin',
         email: 'admin',
         birthday: '1/3/1996',
-        bloodType: 'A',
+        bloodTypeID: 'A',
         lastDonationDate: '1/3/2020',
-        region: 'Haram',
-        city: 'Giza',
+        cityID: 'Giza',
         phoneNum: '+21555941803',
         password: 'admin',
         rePassword: 'admin')
@@ -29,9 +29,29 @@ class UserData extends ChangeNotifier {
     return apiToken;
   }
 
-  void edit(User newData, String userIndex) {
-    users[0] = newData;
-    notifyListeners();
+  Future<User> getProfile(String apiToken) async {
+    User user;
+    try {
+      user = await UserFunctions().getProfileData(apiToken);
+    } catch (e) {
+      print(e);
+    }
+    return user;
+  }
+
+  Future<String> edit(User newData, String apiToken) async {
+    String userApiToken;
+    changeSpinnerStatus();
+    try {
+      //await UserFunctions().editUserData(user: newData, apiToken: apiToken);
+      UserFunctions().edit(newData, apiToken);
+      currentUser = await getProfile(apiToken);
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+    changeSpinnerStatus();
+    return userApiToken;
   }
 
   void changeSpinnerStatus() {
@@ -45,6 +65,7 @@ class UserData extends ChangeNotifier {
     try {
       apiToken = await UserFunctions()
           .login(phoneNum: phoneNumber, password: password);
+      currentUser = await getProfile(apiToken);
       changeSpinnerStatus();
     } catch (e) {
       print(e);

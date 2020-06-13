@@ -23,6 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool edit = false;
   String bottomText = 'Edit';
   Color textColor = Color(0xFF9a0b0b);
+  User _userNewData;
   @override
   void initState() {
     super.initState();
@@ -30,8 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    User _user = Provider.of<UserData>(context).users[0];
-
+    _userNewData = Provider.of<UserData>(context).currentUser;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -55,9 +55,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     TextField(
                       style: TextStyle(color: textColor),
                       enabled: edit,
-                      controller: TextEditingController(text: _user.name),
+                      controller:
+                          TextEditingController(text: _userNewData.name),
                       onChanged: (value) {
-                        _user.name = value;
+                        _userNewData.name = value;
                       },
                       decoration: kTextFieldDecorationGrey.copyWith(
                           hintText: 'Name',
@@ -73,9 +74,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     TextField(
                       style: TextStyle(color: textColor),
                       enabled: edit,
-                      controller: TextEditingController(text: _user.email),
+                      controller:
+                          TextEditingController(text: _userNewData.email),
                       onChanged: (value) {
-                        _user.email = value;
+                        _userNewData.email = value;
                       },
                       decoration: kTextFieldDecorationGrey.copyWith(
                           hintText: 'Email',
@@ -91,9 +93,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     TextField(
                       style: TextStyle(color: textColor),
                       enabled: edit,
-                      controller: TextEditingController(text: _user.birthday),
+                      controller:
+                          TextEditingController(text: _userNewData.birthday),
                       onChanged: (value) {
-                        _user.birthday = value;
+                        _userNewData.birthday = value;
                       },
                       decoration: kTextFieldDecorationGrey.copyWith(
                           hintText: 'Birthday',
@@ -109,17 +112,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     //BloodType
                     RoundedBorderDropdown(
                       textColor: textColor,
-                      hint: _user.bloodType,
+                      hint: bloodTypeList[int.parse(_userNewData.bloodTypeID)],
                       icon: Icons.invert_colors,
                       colour: Color(0xFFE9E9E9),
                       borderColor: Color(0xFFE9E9E9),
                       hintColor: Color(0xFF9a0b0b),
-                      value: _user.bloodType,
+                      value: bloodTypeList[int.parse(_userNewData.bloodTypeID)],
                       list: bloodTypeList,
                       onChange: edit
                           ? (value) {
                               setState(() {
-                                _user.bloodType = value;
+                                _userNewData.bloodTypeID =
+                                    bloodTypeList.indexOf(value).toString();
                               });
                             }
                           : null,
@@ -131,10 +135,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     TextField(
                       style: TextStyle(color: textColor),
                       enabled: edit,
-                      controller:
-                          TextEditingController(text: _user.lastDonationDate),
+                      controller: TextEditingController(
+                          text: _userNewData.lastDonationDate),
                       onChanged: (value) {
-                        _user.lastDonationDate = value;
+                        _userNewData.lastDonationDate = value;
                       },
                       decoration: kTextFieldDecorationGrey.copyWith(
                           hintText: 'Last Donation Date',
@@ -154,13 +158,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       borderColor: Color(0xFFE9E9E9),
                       hintColor: Color(0xFF9a0b0b),
                       list: citiesList,
-                      value: _user.city,
+                      value: citiesList[int.parse(_userNewData.cityID)],
                       icon: Icons.home,
-                      hint: _user.city,
+                      hint: citiesList[int.parse(_userNewData.cityID)],
                       onChange: edit
                           ? (value) {
                               setState(() {
-                                _user.city = value;
+                                _userNewData.cityID =
+                                    citiesList.indexOf(value).toString();
                               });
                             }
                           : null,
@@ -168,33 +173,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       height: 15.0,
                     ),
-                    //region
-                    RoundedBorderDropdown(
-                      textColor: textColor,
-                      colour: Color(0xFFE9E9E9),
-                      borderColor: Color(0xFFE9E9E9),
-                      hintColor: Color(0xFF9a0b0b),
-                      list: regionList,
-                      value: _user.region,
-                      icon: Icons.home,
-                      hint: _user.region,
-                      onChange: edit
-                          ? (value) {
-                              setState(() {
-                                _user.region = value;
-                              });
-                            }
-                          : null,
-                    ),
+
                     SizedBox(
                       height: 15.0,
                     ),
                     TextField(
                       style: TextStyle(color: textColor),
                       enabled: edit,
-                      controller: TextEditingController(text: _user.phoneNum),
+                      controller:
+                          TextEditingController(text: _userNewData.phoneNum),
                       onChanged: (value) {
-                        _user.phoneNum = value;
+                        _userNewData.phoneNum = value;
                       },
                       decoration: kTextFieldDecorationGrey.copyWith(
                           hintText: 'Phone Number',
@@ -211,9 +200,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: TextStyle(color: textColor),
                       enabled: edit,
                       obscureText: true,
-                      controller: TextEditingController(text: _user.password),
+                      controller:
+                          TextEditingController(text: _userNewData.password),
                       onChanged: (value) {
-                        _user.password = value;
+                        _userNewData.password = value;
                       },
                       decoration: kTextFieldDecorationGrey.copyWith(
                           hintText: 'Password',
@@ -230,12 +220,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: TextStyle(color: textColor),
                       enabled: edit,
                       obscureText: true,
-                      controller: TextEditingController(text: _user.rePassword),
+                      controller:
+                          TextEditingController(text: _userNewData.rePassword),
                       onChanged: (value) {
-                        _user.rePassword = value;
+                        _userNewData.rePassword = value;
                       },
                       decoration: kTextFieldDecorationGrey.copyWith(
-                          hintText: 'Phone Number',
+                          hintText: 'Re-Password',
                           fillColor: Color(0xFFE9E9E9),
                           prefixIcon: Icon(
                             Icons.lock,
@@ -272,14 +263,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                         height: 200,
                                         child: FlatButton(
-                                          onPressed: () {
+                                          onPressed: () async {
+                                            try {
+                                              await Provider.of<UserData>(
+                                                      context,
+                                                      listen: false)
+                                                  .edit(
+                                                      User(
+                                                          name:
+                                                              _userNewData.name,
+                                                          phoneNum: _userNewData
+                                                              .phoneNum,
+                                                          cityID: _userNewData
+                                                              .cityID,
+                                                          bloodTypeID:
+                                                              _userNewData
+                                                                  .bloodTypeID,
+                                                          birthday: _userNewData
+                                                              .birthday,
+                                                          email: _userNewData
+                                                              .email,
+                                                          lastDonationDate:
+                                                              _userNewData
+                                                                  .lastDonationDate,
+                                                          password: _userNewData
+                                                              .password,
+                                                          rePassword:
+                                                              _userNewData
+                                                                  .rePassword),
+                                                      widget.apiToken);
+                                              // print(api);
+                                            } catch (e) {
+                                              print(e);
+                                            }
+
                                             setState(() {
                                               edit = false;
                                               bottomText = 'Edit';
                                               textColor = Color(0xFF9a0b0b);
-                                              Provider.of<UserData>(context,
-                                                      listen: false)
-                                                  .edit(_user, widget.apiToken);
                                               print('Edit Done ');
                                             });
                                             Navigator.pop(context);

@@ -16,7 +16,7 @@ class UserFunctions {
         'name': user.name,
         'email': user.email,
         'birth_date': user.birthday,
-        'city_id': '1',
+        'city_id': user.cityID,
         'phone': user.phoneNum,
         'donation_last_date': user.lastDonationDate,
         'password': user.password,
@@ -24,7 +24,6 @@ class UserFunctions {
         'blood_type_id': '1'
       },
     );
-    int statusCode = response.statusCode;
     String responseBody = response.body;
     userToken = jsonDecode(responseBody)['data']['api_token'];
     print(jsonDecode(responseBody)['msg']);
@@ -40,11 +39,75 @@ class UserFunctions {
       headers: headers,
       body: {'phone': phoneNum, 'password': password},
     );
-    int statusCode = response.statusCode;
     String responseBody = response.body;
     print(jsonDecode(responseBody)['msg']);
     userToken = jsonDecode(responseBody)['data']['api_token'];
-    print(userToken);
     return userToken;
+  }
+
+  Future<User> getProfileData(String apiToken) async {
+    final uri = '$baseUrl/profile';
+    final headers = {"Accept": "application/json"};
+    http.Response response = await http.post(
+      uri,
+      headers: headers,
+      body: {'api_token': apiToken},
+    );
+    String responseBody = response.body;
+    print(jsonDecode(responseBody)['msg']);
+    Map<String, dynamic> user = jsonDecode(responseBody)['data']['client'];
+    print('${user['name']} get dataaaaaaaaaaa......');
+    User _user = User(
+        name: user['name'],
+        email: user['email'],
+        birthday: user['birth_date'],
+        cityID: user['city_id'],
+        phoneNum: user['phone'],
+        lastDonationDate: user['donation_last_date'],
+        bloodTypeID: user['blood_type_id'],
+        password: '',
+        rePassword: '');
+    return _user;
+  }
+
+  Future edit(User user, String apiToken) async {
+    final uri = '$baseUrl/profile';
+    final headers = {"Accept": "application/json"};
+    http.Response response;
+    if (user.password == '') {
+      response = await http.post(
+        uri,
+        headers: headers,
+        body: {
+          'api_token': apiToken,
+          'name': user.name,
+          'email': user.email,
+          'birth_date': user.birthday,
+          'city_id': user.cityID,
+          'phone': user.phoneNum,
+          'donation_last_date': user.lastDonationDate,
+          'blood_type_id': user.bloodTypeID
+        },
+      );
+    } else {
+      response = await http.post(
+        uri,
+        headers: headers,
+        body: {
+          'api_token': apiToken,
+          'name': user.name,
+          'email': user.email,
+          'birth_date': user.birthday,
+          'city_id': user.cityID,
+          'phone': user.phoneNum,
+          'donation_last_date': user.lastDonationDate,
+          'password': user.password,
+          'password_confirmation': user.rePassword,
+          'blood_type_id': user.bloodTypeID
+        },
+      );
+    }
+    String responseBody = response.body;
+    print(jsonDecode(responseBody)['msg']);
   }
 }

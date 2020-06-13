@@ -26,7 +26,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String birthday;
   String bloodType;
   String lastDonationDate;
-  String region;
   String city;
   String phoneNum;
   String password;
@@ -143,21 +142,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       SizedBox(
                         height: 15.0,
                       ),
-                      //region
-                      RoundedBorderDropdown(
-                        colour: Colors.white,
-                        borderColor: Colors.redAccent,
-                        hintColor: Colors.grey,
-                        list: regionList,
-                        value: region,
-                        icon: Icons.home,
-                        hint: 'Select Region',
-                        onChange: (value) {
-                          setState(() {
-                            region = value;
-                          });
-                        },
-                      ),
                       SizedBox(
                         height: 15.0,
                       ),
@@ -217,9 +201,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 .register(User(
                                     name: name,
                                     phoneNum: phoneNum,
-                                    city: city,
-                                    region: region,
-                                    bloodType: bloodType,
+                                    cityID: citiesList.indexOf(city).toString(),
+                                    bloodTypeID: bloodTypeList
+                                        .indexOf(bloodType)
+                                        .toString(),
                                     birthday: birthday,
                                     email: email,
                                     lastDonationDate: lastDonationDate,

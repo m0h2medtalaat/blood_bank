@@ -4,10 +4,9 @@ class User {
   String name;
   String email;
   String birthday;
-  String bloodType;
+  String bloodTypeID;
   String lastDonationDate;
-  String region;
-  String city;
+  String cityID;
   String phoneNum;
   String password;
   String rePassword;
@@ -16,10 +15,9 @@ class User {
       {@required this.name,
       @required this.email,
       @required this.birthday,
-      @required this.bloodType,
+      @required this.bloodTypeID,
       @required this.lastDonationDate,
-      @required this.region,
-      @required this.city,
+      @required this.cityID,
       @required this.phoneNum,
       @required this.password,
       @required this.rePassword});
