@@ -1,5 +1,31 @@
 import 'package:flutter/material.dart';
 
+List<String> bloodTypeList = [
+  '',
+  'O+',
+  'O-',
+  'A+',
+  'A-',
+  'B+',
+  'B-',
+  'AB+',
+  'AB-'
+];
+List<String> citiesList = [
+  '',
+  'Cairo',
+  'Giza',
+  'Alexandria',
+  'Suez',
+  'Ismailia',
+  'Sohag',
+  'Minya',
+  'Qena',
+  'Aswan',
+  'Luxor',
+  'North Sinai',
+  'South Sinai',
+];
 const kSlidableTextStyle = TextStyle(
     color: Color(0xFF946986), fontSize: 16, fontWeight: FontWeight.w500);
 const kTextFieldDecorationWhite = InputDecoration(

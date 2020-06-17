@@ -1,8 +1,11 @@
 import 'package:bloodbank/screens/more_screen.dart';
 import 'package:bloodbank/screens/profile_screen.dart';
+import 'package:bloodbank/utilities/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:bloodbank/screens/home_screen.dart';
+import 'package:bloodbank/utilities/article_data.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   final String apiToken;
@@ -14,11 +17,18 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    Provider.of<ArticleData>(context, listen: false)
+        .fetchArticlesListData(widget.apiToken);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screensBody = [
-      HomeScreen(),
+      HomeScreen(apiToken: widget.apiToken),
       ProfileScreen(apiToken: widget.apiToken),
       Container(),
       MoreScreen(),

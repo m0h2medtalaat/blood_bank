@@ -1,21 +1,20 @@
 import 'package:bloodbank/utilities/constants.dart';
-import 'package:bloodbank/utilities/donation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:bloodbank/components/rounded_button.dart';
-import 'package:provider/provider.dart';
-import 'package:bloodbank/utilities/donation_data.dart';
 import 'package:bloodbank/screens/show_map_screen.dart';
 import 'package:bloodbank/components/rounded_dropdownbutton.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-List<String> bloodTypeList = ['A', 'B'];
-List<String> citiesList = ['Giza', 'Cairo'];
-List<String> regionList = ['Haram', 'dd'];
+final _firebaseStore = Firestore.instance;
 
 class AddDonationScreen extends StatefulWidget {
+  final String apiToken;
   @override
   _AddDonationScreenState createState() => _AddDonationScreenState();
+
+  AddDonationScreen({this.apiToken});
 }
 
 class _AddDonationScreenState extends State<AddDonationScreen> {
@@ -186,20 +185,6 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
                       height: 15.0,
                     ),
                     //region
-                    RoundedBorderDropdown(
-                      colour: Color(0xFFE9E9E9),
-                      borderColor: Color(0xFFE9E9E9),
-                      hintColor: Color(0xFF9a0b0b),
-                      list: regionList,
-                      value: region,
-                      icon: Icons.home,
-                      hint: 'Select Region',
-                      onChange: (value) {
-                        setState(() {
-                          region = value;
-                        });
-                      },
-                    ),
                     SizedBox(
                       height: 15.0,
                     ),
@@ -223,16 +208,23 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
                       textColor: Colors.redAccent,
                       colour: Color(0xFF9a0b0b),
                       onPressed: () {
-                        Provider.of<DonationData>(context, listen: false)
-                            .addDonation(Donation(
-                                name: name,
-                                age: age,
-                                bloodType: bloodType,
-                                bloodBagNum: bloodBagNum,
-                                region: region,
-                                city: city,
-                                phoneNum: phoneNum,
-                                hospitalLocation: location));
+                        _firebaseStore
+                            .collection('donations')
+                            .document(
+                                '${new DateTime.now().millisecondsSinceEpoch}')
+                            .setData({
+                          'name': name,
+                          'age': age,
+                          'bloodtype': bloodType,
+                          'bloodbagnum': bloodBagNum,
+                          'city': city,
+                          'phonenum': phoneNum,
+                          'location': GeoPoint(location.position.latitude,
+                              location.position.longitude),
+                          'apitoken': widget.apiToken,
+                          'hospitalName':
+                              "${location.name}, ${location.subAdministrativeArea}, ${location.administrativeArea}",
+                        });
                         print(
                             '$name , $age,$bloodType,$bloodBagNum,$region,$city,$phoneNum');
                         Navigator.pop(context);

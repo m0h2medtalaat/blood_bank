@@ -23,6 +23,10 @@ List<Widget> _tabScroll() => [
     ];
 
 class HomeScreen extends StatefulWidget {
+  final String apiToken;
+
+  HomeScreen({this.apiToken});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -46,8 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Colors.white,
         body: TabBarView(children: [
-          ArticlesScreen(),
-          DonationScreen(),
+          ArticlesScreen(apiToken: widget.apiToken),
+          DonationScreen(
+            apiToken: widget.apiToken,
+          ),
         ]),
       ),
     );

@@ -1,13 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:bloodbank/components/rounded_searchbar.dart';
-import 'package:bloodbank/screens/show_article_screen.dart';
 import 'package:bloodbank/utilities/article_data.dart';
 import 'package:bloodbank/utilities/article.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:bloodbank/components/articleWidget.dart';
 
 class ArticlesScreen extends StatelessWidget {
+  final String apiToken;
+
+  ArticlesScreen({this.apiToken});
+
   @override
   Widget build(BuildContext context) {
+    return Consumer<ArticleData>(
+      builder: (BuildContext context, ArticleData articleData, _) {
+        return Center(
+          child: FutureBuilder<List<Article>>(
+              future: articleData.futureArticleList,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return RefreshIndicator(
+                    child: _myWidget(snapshot: snapshot, apiToken: apiToken),
+                    onRefresh: () async {
+                      articleData.refreshArticlesList(apiToken);
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                return SpinKitWanderingCubes(
+                  color: Color(0xFF9a0b0b),
+                  size: 50.0,
+                );
+              }),
+        );
+      },
+    );
+  }
+
+  Widget _myWidget({AsyncSnapshot snapshot, String apiToken}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
@@ -16,97 +48,19 @@ class ArticlesScreen extends StatelessWidget {
           child: RoundedSearchBar(),
         ),
         Expanded(
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return ArticleWidget(
-                        Provider.of<ArticleData>(context, listen: true)
-                            .articles[index]);
-                  },
-                  childCount: Provider.of<ArticleData>(context, listen: true)
-                      .articles
-                      .length,
-                ),
-              ),
-            ],
-          ),
-        ),
+            child: CustomScrollView(
+          slivers: <Widget>[
+            SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return ArticleWidget(
+                  article: snapshot.data[index],
+                  apiToken: apiToken,
+                );
+              }, childCount: snapshot.data.length),
+            ),
+          ],
+        )),
       ],
-    );
-  }
-}
-
-class ArticleWidget extends StatelessWidget {
-  final Article _article;
-  ArticleWidget(this._article);
-
-  @override
-  Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ShowArticleScreen(
-                    articleIndex:
-                        Provider.of<ArticleData>(context).getIndex(_article))));
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Container(
-          height: 200.0,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25.0),
-              image: DecorationImage(
-                  image: AssetImage('resources/virus.jpg'), fit: BoxFit.cover)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: const ShapeDecoration(
-                      color: Colors.white, shape: CircleBorder()),
-                  child: IconButton(
-                    onPressed: () {
-                      Provider.of<ArticleData>(context, listen: false)
-                          .updateArticle(_article);
-                    },
-                    iconSize: 30,
-                    icon: Icon(
-                      _article.like ? Icons.favorite : Icons.favorite_border,
-                      color: Color(0xFF9a0b0b),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                  height: 42.0,
-                  constraints: BoxConstraints(minWidth: double.infinity),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF9a0b0b)
-                        .withOpacity(0.7), //here i want to add opacity
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40.0),
-                      topRight: Radius.circular(40.0),
-                      bottomLeft: Radius.circular(40.0),
-                      bottomRight: Radius.circular(40.0),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      _article.title,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18.0, color: Colors.white),
-                    ),
-                  )),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

@@ -3,16 +3,14 @@ import 'package:flutter/rendering.dart';
 import 'package:bloodbank/utilities/article.dart';
 import 'package:bloodbank/utilities/article_data.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class HeroHeader implements SliverPersistentHeaderDelegate {
-  HeroHeader({
-    this.minExtent,
-    this.maxExtent,
-    this.article,
-  });
+  HeroHeader({this.minExtent, this.maxExtent, this.article, this.apiToken});
   Article article;
   double maxExtent;
   double minExtent;
+  final String apiToken;
 
   @override
   Widget build(
@@ -85,7 +83,7 @@ class HeroHeader implements SliverPersistentHeaderDelegate {
             child: IconButton(
               onPressed: () {
                 Provider.of<ArticleData>(context, listen: false)
-                    .updateArticle(article);
+                    .likeArticle(apiToken: apiToken, id: article.id);
               },
               icon: Icon(
                 article.like ? Icons.favorite : Icons.favorite_border,
@@ -112,18 +110,49 @@ class HeroHeader implements SliverPersistentHeaderDelegate {
       OverScrollHeaderStretchConfiguration();
 }
 
-class ShowArticleScreen extends StatelessWidget {
-  ShowArticleScreen({this.articleIndex});
-  final int articleIndex;
+class ShowArticleScreen extends StatefulWidget {
+  ShowArticleScreen({this.apiToken, this.articleId});
+  final int articleId;
+  final String apiToken;
+
+  @override
+  _ShowArticleScreenState createState() => _ShowArticleScreenState();
+}
+
+class _ShowArticleScreenState extends State<ShowArticleScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    Provider.of<ArticleData>(context, listen: false)
+        .fetchArticleData(apiToken: widget.apiToken, id: widget.articleId);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _scrollView(context),
+      body: Center(
+        child: FutureBuilder<Article>(
+            future:
+                Provider.of<ArticleData>(context, listen: true).futureArticle,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Center(
+                    child:
+                        _widget(snapshot: snapshot, apiToken: widget.apiToken));
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              return SpinKitWanderingCubes(
+                color: Color(0xFF9a0b0b),
+                size: 50.0,
+              );
+            }),
+      ),
     );
   }
 
-  Widget _scrollView(BuildContext context) {
+  Widget _widget({AsyncSnapshot snapshot, String apiToken}) {
     // Use LayoutBuilder to get the hero header size while keeping the image aspect-ratio
     return Container(
       child: CustomScrollView(
@@ -133,31 +162,23 @@ class ShowArticleScreen extends StatelessWidget {
             delegate: HeroHeader(
               minExtent: 160.0,
               maxExtent: 250.0,
-              article: Provider.of<ArticleData>(context).articles[articleIndex],
+              article: snapshot.data,
+              apiToken: apiToken,
             ),
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40.0),
-                          topRight: Radius.circular(40.0),
-                        )),
-                    child: Text(
-                        Provider.of<ArticleData>(context, listen: true)
-                            .articles[articleIndex]
-                            .content,
+                return Container(
+                  color: Colors.white,
+                  child: Center(
+                    child: Text(snapshot.data.content,
                         style: TextStyle(
                             fontSize: 18.0, color: Color(0xFF878585))),
                   ),
                 );
               },
-              childCount: 10,
+//              childCount: 1,
             ),
           )
         ],

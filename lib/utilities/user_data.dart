@@ -21,7 +21,8 @@ class UserData extends ChangeNotifier {
     changeSpinnerStatus();
     String apiToken;
     try {
-      apiToken = await UserFunctions().register(user: user);
+      apiToken = await UserFunctionsApi().register(user: user);
+      notifyListeners();
       changeSpinnerStatus();
     } catch (e) {
       print(e);
@@ -32,7 +33,7 @@ class UserData extends ChangeNotifier {
   Future<User> getProfile(String apiToken) async {
     User user;
     try {
-      user = await UserFunctions().getProfileData(apiToken);
+      user = await UserFunctionsApi().getProfileData(apiToken);
     } catch (e) {
       print(e);
     }
@@ -44,7 +45,7 @@ class UserData extends ChangeNotifier {
     changeSpinnerStatus();
     try {
       //await UserFunctions().editUserData(user: newData, apiToken: apiToken);
-      UserFunctions().edit(newData, apiToken);
+      UserFunctionsApi().edit(newData, apiToken);
       currentUser = await getProfile(apiToken);
       notifyListeners();
     } catch (e) {
@@ -63,7 +64,7 @@ class UserData extends ChangeNotifier {
     changeSpinnerStatus();
     String apiToken;
     try {
-      apiToken = await UserFunctions()
+      apiToken = await UserFunctionsApi()
           .login(phoneNum: phoneNumber, password: password);
       currentUser = await getProfile(apiToken);
       changeSpinnerStatus();

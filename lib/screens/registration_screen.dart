@@ -10,10 +10,6 @@ import 'package:bloodbank/components/date_button.dart';
 import 'package:provider/provider.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-List<String> bloodTypeList = ['A', 'B'];
-List<String> citiesList = ['Giza', 'Cairo'];
-List<String> regionList = ['Haram', 'dd'];
-
 class RegistrationScreen extends StatefulWidget {
   final String id = 'RegistrationId';
   @override
@@ -24,9 +20,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String name;
   String email;
   String birthday;
-  String bloodType;
+  String bloodTypeID;
   String lastDonationDate;
-  String city;
+  String cityID;
   String phoneNum;
   String password;
   String rePassword;
@@ -104,11 +100,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         icon: Icons.invert_colors,
                         borderColor: Colors.redAccent,
                         hintColor: Colors.grey,
-                        value: bloodType,
+                        value: bloodTypeList[int.parse(bloodTypeID)],
                         list: bloodTypeList,
                         onChange: (value) {
                           setState(() {
-                            bloodType = value;
+                            bloodTypeID =
+                                bloodTypeList.indexOf(value).toString();
                           });
                         },
                       ),
@@ -130,12 +127,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         borderColor: Colors.redAccent,
                         hintColor: Colors.grey,
                         list: citiesList,
-                        value: city,
+                        value: citiesList[(int.parse(cityID)) - 1],
                         icon: Icons.home,
                         hint: 'Select City',
                         onChange: (value) {
                           setState(() {
-                            city = value;
+                            cityID = (citiesList.indexOf(value) + 1).toString();
                           });
                         },
                       ),
@@ -201,10 +198,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 .register(User(
                                     name: name,
                                     phoneNum: phoneNum,
-                                    cityID: citiesList.indexOf(city).toString(),
-                                    bloodTypeID: bloodTypeList
-                                        .indexOf(bloodType)
-                                        .toString(),
+                                    cityID: cityID,
+                                    bloodTypeID: bloodTypeID,
                                     birthday: birthday,
                                     email: email,
                                     lastDonationDate: lastDonationDate,

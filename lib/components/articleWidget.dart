@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:bloodbank/screens/show_article_screen.dart';
-import 'package:bloodbank/utilities/article_data.dart';
 import 'package:bloodbank/utilities/article.dart';
+import 'package:bloodbank/screens/show_article_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:bloodbank/utilities/article_data.dart';
 
 class ArticleWidget extends StatelessWidget {
-  final Article _article;
-  ArticleWidget(this._article);
+  final Article article;
+  final apiToken;
+  ArticleWidget({this.article, this.apiToken});
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +17,7 @@ class ArticleWidget extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => ShowArticleScreen(
-                    articleIndex:
-                        Provider.of<ArticleData>(context).getIndex(_article))));
+                    apiToken: apiToken, articleId: article.id)));
       },
       child: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -39,11 +39,12 @@ class ArticleWidget extends StatelessWidget {
                   child: IconButton(
                     onPressed: () {
                       Provider.of<ArticleData>(context, listen: false)
-                          .updateArticle(_article);
+                          .likeArticleInList(
+                              apiToken: apiToken, id: article.id);
                     },
                     iconSize: 30,
                     icon: Icon(
-                      _article.like ? Icons.favorite : Icons.favorite_border,
+                      article.like ? Icons.favorite : Icons.favorite_border,
                       color: Color(0xFF9a0b0b),
                     ),
                   ),
@@ -64,7 +65,7 @@ class ArticleWidget extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      _article.title,
+                      article.title,
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 18.0, color: Colors.white),
                     ),

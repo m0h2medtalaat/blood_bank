@@ -8,10 +8,6 @@ import 'package:bloodbank/components/rounded_button.dart';
 import 'package:provider/provider.dart';
 import 'package:bloodbank/components/rounded_dropdownbutton.dart';
 
-List<String> bloodTypeList = ['A', 'B'];
-List<String> citiesList = ['Giza', 'Cairo'];
-List<String> regionList = ['Haram', 'dd'];
-
 class ProfileScreen extends StatefulWidget {
   final String apiToken;
   ProfileScreen({this.apiToken});
@@ -31,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _userNewData = Provider.of<UserData>(context).currentUser;
+    _userNewData = Provider.of<UserData>(context, listen: true).currentUser;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -124,6 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               setState(() {
                                 _userNewData.bloodTypeID =
                                     bloodTypeList.indexOf(value).toString();
+                                print(_userNewData.bloodTypeID);
                               });
                             }
                           : null,
@@ -249,83 +246,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           });
                         } else if (edit == true) {
                           showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (context) => SingleChildScrollView(
-                                      child: Container(
-                                    padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context)
-                                            .viewInsets
-                                            .bottom),
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFF737373),
-                                        ),
-                                        height: 200,
-                                        child: FlatButton(
-                                          onPressed: () async {
-                                            try {
-                                              await Provider.of<UserData>(
-                                                      context,
-                                                      listen: false)
-                                                  .edit(
-                                                      User(
-                                                          name:
-                                                              _userNewData.name,
-                                                          phoneNum: _userNewData
-                                                              .phoneNum,
-                                                          cityID: _userNewData
-                                                              .cityID,
-                                                          bloodTypeID:
-                                                              _userNewData
-                                                                  .bloodTypeID,
-                                                          birthday: _userNewData
-                                                              .birthday,
-                                                          email: _userNewData
-                                                              .email,
-                                                          lastDonationDate:
-                                                              _userNewData
-                                                                  .lastDonationDate,
-                                                          password: _userNewData
-                                                              .password,
-                                                          rePassword:
-                                                              _userNewData
-                                                                  .rePassword),
-                                                      widget.apiToken);
-                                              // print(api);
-                                            } catch (e) {
-                                              print(e);
-                                            }
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) => SingleChildScrollView(
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF737373),
+                                  ),
+                                  height: 200,
+                                  child: FlatButton(
+                                    onPressed: () async {
+                                      try {
+                                        await Provider.of<UserData>(context,
+                                                listen: false)
+                                            .edit(
+                                                User(
+                                                    name: _userNewData.name,
+                                                    phoneNum:
+                                                        _userNewData.phoneNum,
+                                                    cityID: _userNewData.cityID,
+                                                    bloodTypeID: _userNewData
+                                                        .bloodTypeID,
+                                                    birthday:
+                                                        _userNewData.birthday,
+                                                    email: _userNewData.email,
+                                                    lastDonationDate:
+                                                        _userNewData
+                                                            .lastDonationDate,
+                                                    password:
+                                                        _userNewData.password,
+                                                    rePassword: _userNewData
+                                                        .rePassword),
+                                                widget.apiToken);
+                                        // print(api);
+                                      } catch (e) {
+                                        print(e);
+                                      }
 
-                                            setState(() {
-                                              edit = false;
-                                              bottomText = 'Edit';
-                                              textColor = Color(0xFF9a0b0b);
-                                              print('Edit Done ');
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(20.0),
-                                                topLeft: Radius.circular(20.0),
-                                              ),
-                                              color: Color(0xFF9a0b0b),
-                                            ),
-                                            height: 42,
-                                            width: 500,
-                                            child: Center(
-                                              child: Text(
-                                                'Save ?',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.redAccent),
-                                              ),
-                                            ),
-                                          ),
-                                        )),
-                                  )));
+                                      setState(() {
+                                        edit = false;
+                                        bottomText = 'Edit';
+                                        textColor = Color(0xFF9a0b0b);
+                                        print('Edit Done ');
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(20.0),
+                                          topLeft: Radius.circular(20.0),
+                                        ),
+                                        color: Color(0xFF9a0b0b),
+                                      ),
+                                      height: 42,
+                                      width: 500,
+                                      child: Center(
+                                        child: Text(
+                                          'Save ?',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.redAccent),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
                         }
                       },
                     )

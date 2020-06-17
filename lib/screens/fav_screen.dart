@@ -40,7 +40,10 @@ class FavScreen extends StatelessWidget {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                return ArticleWidget(favArticles[index]);
+                return ArticleWidget(
+                  apiToken: 'ss',
+                  article: Article(),
+                );
               },
               childCount: favArticles.length,
             ),

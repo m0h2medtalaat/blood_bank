@@ -6,45 +6,56 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:bloodbank/utilities/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:bloodbank/utilities/donation_data.dart';
 import 'package:bloodbank/screens/show_donation_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class DonationScreen extends StatelessWidget {
+  final String apiToken;
+
+  DonationScreen({this.apiToken});
+
   @override
   Widget build(BuildContext context) {
+    List<Donation> donationList = Provider.of<List<Donation>>(context);
+
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddDonationScreen()));
-        },
-        elevation: 5,
-        backgroundColor: Colors.white,
-        child: (Icon(
-          Icons.add,
-          color: Color(0xFF9a0b0b),
-          size: 40.0,
-        )),
-      ),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return RoundedSlidable(
-                    donation: Provider.of<DonationData>(context, listen: true)
-                        .donations[index],
-                    donationIndex: index);
-              },
-              childCount: Provider.of<DonationData>(context, listen: true)
-                  .donations
-                  .length,
-            ),
-          )
-        ],
-      ),
-    );
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddDonationScreen(
+                          apiToken: apiToken,
+                        )));
+          },
+          elevation: 5,
+          backgroundColor: Colors.white,
+          child: (Icon(
+            Icons.add,
+            color: Color(0xFF9a0b0b),
+            size: 40.0,
+          )),
+        ),
+        body: donationList != null
+            ? CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return RoundedSlidable(
+                            donation: donationList[index],
+                            donationIndex: index);
+                      },
+                      childCount: donationList.length,
+                    ),
+                  )
+                ],
+              )
+            : SpinKitWanderingCubes(
+                color: Color(0xFF9a0b0b),
+                size: 50.0,
+              ));
   }
 }
 
@@ -91,7 +102,7 @@ class RoundedSlidable extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      'Hospital: ${donation.hospitalLocation.name}',
+                      'Hospital: ${donation.hospitalName.split(',')[0]}',
                       style: kSlidableTextStyle,
                     ),
                     SizedBox(
