@@ -26,6 +26,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String phoneNum;
   String password;
   String rePassword;
+  String bloodTypeValue;
+  String cityValue;
 
   @override
   Widget build(BuildContext context) {
@@ -100,12 +102,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         icon: Icons.invert_colors,
                         borderColor: Colors.redAccent,
                         hintColor: Colors.grey,
-                        value: bloodTypeList[int.parse(bloodTypeID)],
+                        value: bloodTypeValue,
                         list: bloodTypeList,
                         onChange: (value) {
                           setState(() {
                             bloodTypeID =
-                                bloodTypeList.indexOf(value).toString();
+                                (bloodTypeList.indexOf(value) + 1).toString();
+                            bloodTypeValue = value;
                           });
                         },
                       ),
@@ -127,17 +130,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         borderColor: Colors.redAccent,
                         hintColor: Colors.grey,
                         list: citiesList,
-                        value: citiesList[(int.parse(cityID)) - 1],
+                        value: cityValue,
                         icon: Icons.home,
                         hint: 'Select City',
                         onChange: (value) {
                           setState(() {
                             cityID = (citiesList.indexOf(value) + 1).toString();
+                            cityValue = value;
                           });
                         },
-                      ),
-                      SizedBox(
-                        height: 15.0,
                       ),
                       SizedBox(
                         height: 15.0,
