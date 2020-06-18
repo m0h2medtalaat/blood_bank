@@ -5,16 +5,18 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 
 class RoundedDateButton extends StatelessWidget {
-  RoundedDateButton({this.title, this.onChanged});
+  RoundedDateButton({this.title, this.onChanged, this.validator});
 
   final String title;
   final Function onChanged;
+  final Function validator;
 
   final dateFormat = DateFormat("dd/MM/yyyy");
 
   @override
   Widget build(BuildContext context) {
     return DateTimeField(
+        validator: validator,
         onChanged: onChanged,
         decoration: kTextFieldDecorationWhite.copyWith(
             hintText: title,

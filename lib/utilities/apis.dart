@@ -9,6 +9,7 @@ const String baseUrl = 'http://ipda3-tech.com/blood-bank/api/v1';
 class UserFunctionsApi {
   Future<String> register({User user}) async {
     String userToken;
+    String msg;
     final uri = '$baseUrl/signup';
     final headers = {"Accept": "application/json"};
     http.Response response = await http.post(
@@ -28,12 +29,18 @@ class UserFunctionsApi {
     );
     String responseBody = response.body;
     userToken = jsonDecode(responseBody)['data']['api_token'];
-    print(jsonDecode(responseBody)['msg']);
+    msg = jsonDecode(responseBody)['msg'];
+    if (msg == 'تم الاضافة بنجاح') {
+      userToken = jsonDecode(responseBody)['data']['api_token'];
+    } else {
+      userToken = msg;
+    }
     return userToken;
   }
 
   Future<String> login({String phoneNum, String password}) async {
     String userToken;
+    String msg;
     final uri = '$baseUrl/login';
     final headers = {"Accept": "application/json"};
     http.Response response = await http.post(
@@ -42,8 +49,13 @@ class UserFunctionsApi {
       body: {'phone': phoneNum, 'password': password},
     );
     String responseBody = response.body;
+    msg = jsonDecode(responseBody)['msg'];
     print(jsonDecode(responseBody)['msg']);
-    userToken = jsonDecode(responseBody)['data']['api_token'];
+    if (msg == 'تم تسجيل الدخول') {
+      userToken = jsonDecode(responseBody)['data']['api_token'];
+    } else if (msg == 'بيانات الدخول غير صحيحة') {
+      userToken = 'not found';
+    }
     return userToken;
   }
 

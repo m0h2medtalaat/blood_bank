@@ -5,28 +5,15 @@ import 'package:bloodbank/utilities/apis.dart';
 class UserData extends ChangeNotifier {
   bool spinningStatus = false;
   User currentUser;
-  List<User> users = [
-    User(
-        name: 'admin',
-        email: 'admin',
-        birthday: '1/3/1996',
-        bloodTypeID: 'A',
-        lastDonationDate: '1/3/2020',
-        cityID: 'Giza',
-        phoneNum: '+21555941803',
-        password: 'admin',
-        rePassword: 'admin')
-  ];
   Future<String> register(User user) async {
     changeSpinnerStatus();
     String apiToken;
     try {
       apiToken = await UserFunctionsApi().register(user: user);
-      notifyListeners();
-      changeSpinnerStatus();
     } catch (e) {
       print(e);
     }
+    changeSpinnerStatus();
     return apiToken;
   }
 
@@ -66,11 +53,13 @@ class UserData extends ChangeNotifier {
     try {
       apiToken = await UserFunctionsApi()
           .login(phoneNum: phoneNumber, password: password);
-      currentUser = await getProfile(apiToken);
-      changeSpinnerStatus();
+      if (apiToken != 'not found') {
+        currentUser = await getProfile(apiToken);
+      }
     } catch (e) {
       print(e);
     }
+    changeSpinnerStatus();
     return apiToken;
   }
 }
