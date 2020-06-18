@@ -30,7 +30,6 @@ class _MainScreenState extends State<MainScreen> {
     final List<Widget> _screensBody = [
       HomeScreen(apiToken: widget.apiToken),
       ProfileScreen(apiToken: widget.apiToken),
-      Container(),
       MoreScreen(),
     ];
     return Scaffold(
@@ -57,14 +56,6 @@ class _MainScreenState extends State<MainScreen> {
               title: Text('Profile', style: TextStyle(color: Colors.white)),
               icon: Icon(
                 Icons.person,
-                color: Colors.white,
-              )),
-          BottomNavyBarItem(
-              activeColor: Colors.white,
-              title:
-                  Text('Notifications', style: TextStyle(color: Colors.white)),
-              icon: Icon(
-                Icons.notifications,
                 color: Colors.white,
               )),
           BottomNavyBarItem(
