@@ -1,12 +1,64 @@
 import 'dart:convert';
-import 'package:bloodbank/utilities/article.dart';
 import 'package:bloodbank/utilities/user.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:bloodbank/utilities/article.dart';
 
 const String baseUrl = 'http://ipda3-tech.com/blood-bank/api/v1';
 
 class UserFunctionsApi {
+  Future<String> resetPassword(
+      {String phoneNum,
+      String password,
+      String rePassword,
+      String pinCode}) async {
+    String msg;
+    final uri = '$baseUrl/new-password';
+    final headers = {"Accept": "application/json"};
+    http.Response response = await http.post(
+      uri,
+      headers: headers,
+      body: {
+        'phone': phoneNum,
+        'pin_code': pinCode,
+        'password': password,
+        'password_confirmation': rePassword
+      },
+    );
+    String responseBody = response.body;
+    msg = jsonDecode(responseBody)['msg'];
+    print(jsonDecode(responseBody)['msg']);
+    return msg;
+  }
+
+  Future<Map> forget({String phoneNum}) async {
+    String pinCode;
+    String msg;
+    String email;
+    var data = Map();
+    final uri = '$baseUrl/reset-password';
+    final headers = {"Accept": "application/json"};
+    http.Response response = await http.post(
+      uri,
+      headers: headers,
+      body: {
+        'phone': phoneNum,
+      },
+    );
+    String responseBody = response.body;
+    msg = jsonDecode(responseBody)['msg'];
+    print(jsonDecode(responseBody)['msg']);
+    if (msg == 'برجاء فحص هاتفك') {
+      pinCode =
+          jsonDecode(responseBody)['data']['pin_code_for_test'].toString();
+      email = jsonDecode(responseBody)['data']['email'];
+      data['pinCode'] = pinCode;
+      data['email'] = email;
+    } else {
+      pinCode = 'not found';
+    }
+    return data;
+  }
+
   Future<String> register({User user}) async {
     String userToken;
     String msg;
@@ -127,6 +179,36 @@ class UserFunctionsApi {
 }
 
 class ArticlesApi {
+  Future<List<Article>> getFavArticlesList(String apiToken) async {
+    List<Article> articles;
+    final uri = '$baseUrl/my-favourites?api_token=$apiToken';
+    print(uri);
+    http.Response response = await http.get(uri);
+    String responseBody = response.body;
+    print(jsonDecode(responseBody)['msg']);
+    var articleObjJson = jsonDecode(responseBody)['data']['data'] as List;
+    articles = articleObjJson
+        .map((articleJson) => Article.fromJson(articleJson))
+        .toList();
+    return articles;
+  }
+
+  Future<List<Article>> searchArticlesApi(
+      {String categoryID, String keyword, String apiToken}) async {
+    List<Article> articles;
+    final uri =
+        '$baseUrl/posts?api_token=$apiToken&keyword=$keyword&category_id=$categoryID';
+    print(uri);
+    http.Response response = await http.get(uri);
+    String responseBody = response.body;
+    print(jsonDecode(responseBody)['msg']);
+    var articleObjJson = jsonDecode(responseBody)['data']['data'] as List;
+    articles = articleObjJson
+        .map((articleJson) => Article.fromJson(articleJson))
+        .toList();
+    return articles;
+  }
+
   Future<List<Article>> getArticlesList(String apiToken) async {
     List<Article> articles;
     final uri = '$baseUrl/posts?api_token=$apiToken';

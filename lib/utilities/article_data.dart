@@ -5,6 +5,14 @@ import 'package:bloodbank/utilities/apis.dart';
 class ArticleData extends ChangeNotifier {
   Future<List<Article>> futureArticleList;
   Future<Article> futureArticle;
+  Future<List<Article>> favArticleList;
+  void searchArticles({String apiToken, String catID, String keyword}) async {
+    futureArticleList = ArticlesApi().searchArticlesApi(
+        apiToken: apiToken, categoryID: catID, keyword: keyword);
+    await Future.delayed(Duration(milliseconds: 150));
+    notifyListeners();
+  }
+
   void fetchArticlesListData(String apiToken) {
     futureArticleList = ArticlesApi().getArticlesList(apiToken);
   }
@@ -18,6 +26,7 @@ class ArticleData extends ChangeNotifier {
     ArticlesApi().likeArticle(apiToken: apiToken, articleID: id);
     await Future.delayed(Duration(milliseconds: 150));
     refreshArticlesList(apiToken);
+    refreshFavArticleList(apiToken: apiToken);
     notifyListeners();
   }
 
@@ -35,36 +44,16 @@ class ArticleData extends ChangeNotifier {
     await Future.delayed(Duration(milliseconds: 150));
     refreshArticleData(apiToken: apiToken, id: id);
     refreshArticlesList(apiToken);
+    refreshFavArticleList(apiToken: apiToken);
     notifyListeners();
   }
 
-  List<Article> articles = [
-    Article(
-        title: 'title1',
-        content:
-            'people may become infected by touching a contaminated surface and then touching their.'),
-    Article(
-        title: 'title2',
-        content:
-            'people may become infected by touching a contaminated surface and then touching their.')
-  ];
+  void getFavArticleList({String apiToken}) {
+    favArticleList = ArticlesApi().getFavArticlesList(apiToken);
+  }
 
-  void updateArticle(Article article) {
-    article.toggleDone();
+  void refreshFavArticleList({String apiToken}) {
+    favArticleList = ArticlesApi().getFavArticlesList(apiToken);
     notifyListeners();
-  }
-
-  int getIndex(Article article) {
-    return articles.indexOf(article);
-  }
-
-  List<Article> getFavArticles() {
-    List<Article> fav = [];
-    for (int i = 0; i < articles.length; i++) {
-      if (articles[i].like == true) {
-        fav.add(articles[i]);
-      }
-    }
-    return fav;
   }
 }

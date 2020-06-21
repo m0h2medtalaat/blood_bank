@@ -62,4 +62,36 @@ class UserData extends ChangeNotifier {
     changeSpinnerStatus();
     return apiToken;
   }
+
+  Future<Map> forget(String phoneNumber) async {
+    changeSpinnerStatus();
+    var data = Map();
+    try {
+      data = await UserFunctionsApi().forget(phoneNum: phoneNumber);
+    } catch (e) {
+      print(e);
+    }
+    changeSpinnerStatus();
+    return data;
+  }
+
+  Future<String> resetPassword(
+      {String phoneNumber,
+      String password,
+      String rePassword,
+      String pinCode}) async {
+    changeSpinnerStatus();
+    String msg;
+    try {
+      msg = await UserFunctionsApi().resetPassword(
+          phoneNum: phoneNumber,
+          pinCode: pinCode,
+          rePassword: rePassword,
+          password: password);
+    } catch (e) {
+      print(e);
+    }
+    changeSpinnerStatus();
+    return msg;
+  }
 }

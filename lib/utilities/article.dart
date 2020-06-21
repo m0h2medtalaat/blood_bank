@@ -19,7 +19,4 @@ class Article {
         content: json['content'],
         id: json['id'] as int);
   }
-  void toggleDone() {
-    like = !like;
-  }
 }

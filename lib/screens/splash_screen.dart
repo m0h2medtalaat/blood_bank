@@ -35,41 +35,45 @@ class SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('resources/splash_top.png'),
-                      fit: BoxFit.cover),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                height: 50.0,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('resources/red_logo.png'),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('resources/splash_bottom.png'),
-                      fit: BoxFit.cover),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+          constraints: BoxConstraints.expand(),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('resources/splash.png'), fit: BoxFit.cover))
+//        child: Column(
+//          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//          crossAxisAlignment: CrossAxisAlignment.stretch,
+//          children: <Widget>[
+//            Expanded(
+//              child: Container(
+//                decoration: BoxDecoration(
+//                  image: DecorationImage(
+//                      image: AssetImage('resources/splash_top.png'),
+//                      fit: BoxFit.cover),
+//                ),
+//              ),
+//            ),
+//            Expanded(
+//              child: Container(
+//                height: 50.0,
+//                decoration: BoxDecoration(
+//                  image: DecorationImage(
+//                    image: AssetImage('resources/red_logo.png'),
+//                  ),
+//                ),
+//              ),
+//            ),
+//            Expanded(
+//              child: Container(
+//                decoration: BoxDecoration(
+//                  image: DecorationImage(
+//                      image: AssetImage('resources/splash_bottom.png'),
+//                      fit: BoxFit.cover),
+//                ),
+//              ),
+//            ),
+//          ],
+//        ),
+          ),
     );
   }
 }

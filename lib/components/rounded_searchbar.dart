@@ -1,90 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:bloodbank/utilities/constants.dart';
 
-List<String> list = ['first', 'second'];
+class RoundedSearchBar extends StatelessWidget {
+  final Function searchFun;
+  final Function dropdownFun;
+  final String dropdownValue;
+  final List list;
 
-class RoundedSearchBar extends StatefulWidget {
-  @override
-  _RoundedSearchBarState createState() => _RoundedSearchBarState();
-}
+  RoundedSearchBar(
+      {this.searchFun, this.dropdownFun, this.dropdownValue, this.list});
 
-class _RoundedSearchBarState extends State<RoundedSearchBar> {
-  final List<String> dropdownValues = list;
-  String val;
-  @override
   Widget build(BuildContext context) {
     return Container(
-        constraints: BoxConstraints(minWidth: double.infinity),
-        height: 50.0,
-        padding: EdgeInsets.symmetric(vertical: 16.0),
-        decoration: BoxDecoration(
-          color: Color(0xFFEBEBEB),
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              flex: 3,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 6),
-                child: DropdownButton(
-                  elevation: 5,
-                  icon: Icon(
-                    Icons.keyboard_arrow_down,
-                    size: 20,
+        height: 42.0,
+        child: Center(
+          child: TextField(
+            onChanged: searchFun,
+            style: TextStyle(fontSize: 16),
+            decoration: kTextFieldDecorationGrey.copyWith(
+              hintText: 'Search',
+              hintStyle: TextStyle(
+                fontSize: 16,
+                color: Color(0xFF9a0b0b),
+              ),
+              fillColor: Color(0xFFE9E9E9),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Color(0xFF9a0b0b),
+              ),
+              suffixIcon: Container(
+                width: 150,
+                decoration: BoxDecoration(
                     color: Color(0xFF9a0b0b),
+                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                child: Center(
+                  child: DropdownButton(
+                    dropdownColor: Color(0xFF9a0b0b),
+                    underline: SizedBox(),
+                    elevation: 5,
+                    items: list
+                        .map((value) => DropdownMenuItem(
+                              child: Text(
+                                value,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              ),
+                              value: value,
+                            ))
+                        .toList(),
+                    onChanged: dropdownFun,
+                    value: dropdownValue,
                   ),
-                  hint: Text(
-                    dropdownValues[0],
-                    style: TextStyle(
-                        color: Color(0xFF9a0b0b),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  items: dropdownValues
-                      .map((value) => DropdownMenuItem(
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                  color: Color(0xFF9a0b0b),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            value: value,
-                          ))
-                      .toList(),
-                  onChanged: (String value) {
-                    setState(() {
-                      val = value;
-                    });
-                  },
-                  value: val,
-//          value: dropdownValues.first,
                 ),
               ),
             ),
-            Expanded(
-              flex: 8,
-              child: TextField(
-                style: TextStyle(fontSize: 18),
-                decoration: InputDecoration(
-                  suffixIcon: Icon(Icons.search, color: Color(0xFF9a0b0b)),
-                  hintText: 'Enter a value',
-                  hintStyle: TextStyle(color: Color(0xFFD0A0A0), fontSize: 18),
-                  fillColor: Color(0xFFEBEBEB),
-                  filled: true,
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                ),
-              ),
-            ),
-          ],
+          ),
         ));
   }
 }

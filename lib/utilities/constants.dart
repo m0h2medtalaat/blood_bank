@@ -1,18 +1,7 @@
 import 'package:flutter/material.dart';
 
-List<String> bloodTypeList = [
-  '',
-  'O+',
-  'O-',
-  'A+',
-  'A-',
-  'B+',
-  'B-',
-  'AB+',
-  'AB-'
-];
+List<String> bloodTypeList = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
 List<String> citiesList = [
-  '',
   'Cairo',
   'Giza',
   'Alexandria',
@@ -25,6 +14,12 @@ List<String> citiesList = [
   'Luxor',
   'North Sinai',
   'South Sinai',
+];
+List<String> searchFilter = [
+  'All',
+  'Prevention',
+  'Drug & Supplements',
+  'Heath & Living',
 ];
 const kSlidableTextStyle = TextStyle(
     color: Color(0xFF946986), fontSize: 16, fontWeight: FontWeight.w500);

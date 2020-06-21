@@ -18,7 +18,6 @@ class DonationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Donation> donationList = Provider.of<List<Donation>>(context);
-
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -38,19 +37,22 @@ class DonationScreen extends StatelessWidget {
           )),
         ),
         body: donationList != null
-            ? CustomScrollView(
-                slivers: <Widget>[
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return RoundedSlidable(
-                            donation: donationList[index],
-                            donationIndex: index);
-                      },
-                      childCount: donationList.length,
+            ? Padding(
+                padding: EdgeInsets.only(bottom: 15.0),
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return RoundedSlidable(
+                              donation: donationList[index],
+                              donationIndex: index);
+                        },
+                        childCount: donationList.length,
+                      ),
                     ),
-                  )
-                ],
+                  ],
+                ),
               )
             : SpinKitWanderingCubes(
                 color: Color(0xFF9a0b0b),

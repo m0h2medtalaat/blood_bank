@@ -1,4 +1,4 @@
-import 'package:bloodbank/screens/forget_screen.dart';
+import 'package:bloodbank/screens/reset_password_screen.dart';
 import 'package:bloodbank/utilities/constants.dart';
 import 'package:bloodbank/utilities/user_data.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,20 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:bloodbank/components/rounded_button.dart';
 import 'package:bloodbank/screens/registration_screen.dart';
-import 'package:bloodbank/screens/main_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:bloodbank/components/rounded_alert.dart';
 
-class LoginScreen extends StatelessWidget {
-  final String id = 'LogInScreen';
-
+class ForgetScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     TextEditingController _phoneNumberController = TextEditingController();
-    TextEditingController _passwordController = TextEditingController();
     return Scaffold(
         body: ModalProgressHUD(
       inAsyncCall: Provider.of<UserData>(context, listen: true).spinningStatus,
@@ -47,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                       height: 250.0,
                     ),
                     SizedBox(
-                      height: 25.0,
+                      height: 15,
                     ),
                     TextFormField(
                       keyboardType: TextInputType.number,
@@ -64,33 +60,16 @@ class LoginScreen extends StatelessWidget {
                       decoration: kTextFieldDecorationWhite.copyWith(
                           hintText: 'Phone Number'),
                     ),
-                    SizedBox(height: 10.0),
-                    TextFormField(
-                      controller: _passwordController,
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'Enter password';
-                        } else if (text.length < 5) {
-                          return 'User 6 Characters or more';
-                        }
-                        return null;
-                      },
-                      obscureText: true,
-                      textAlign: TextAlign.center,
-                      decoration: kTextFieldDecorationWhite.copyWith(
-                          hintText: 'Password'),
-                    ),
                     RoundedButton(
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           try {
-                            String apiToken = await Provider.of<UserData>(
-                                    context,
+                            var data = await Provider.of<UserData>(context,
                                     listen: false)
-                                .login(_phoneNumberController.text,
-                                    _passwordController.text);
-                            if (apiToken != null) {
-                              if (apiToken == 'not found') {
+                                .forget(_phoneNumberController.text);
+                            print(data['pinCode']);
+                            if (data != null) {
+                              if (data['pinCode'] == 'not found') {
                                 return showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -98,19 +77,31 @@ class LoginScreen extends StatelessWidget {
                                           onPressed: () {
                                             Navigator.pop(context);
                                           },
-                                          title: 'Sign-in Error',
+                                          title: 'Accont not Found',
                                           content:
-                                              'Please enter valid Phone Number and password');
+                                              'Please enter valid Phone Number');
                                     });
                               } else {
-                                print('${_phoneNumberController.text} login');
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          MainScreen(apiToken: apiToken)),
-                                  (Route<dynamic> route) => false,
-                                );
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return RoundedAlert(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ResetPasswordScreen(
+                                                          phoneNumber:
+                                                              _phoneNumberController
+                                                                  .text,
+                                                        )));
+                                          },
+                                          title: 'Email sent',
+                                          content:
+                                              'Please check your email address for rest code. ${data['email']}');
+                                    });
                               }
                             }
                           } catch (e) {
@@ -118,29 +109,12 @@ class LoginScreen extends StatelessWidget {
                           }
                         }
                       },
-                      title: 'Login',
+                      title: 'Next',
                       colour: Colors.white,
                       textColor: Color(0xFF9a0b0b),
                     ),
                     SizedBox(
                       height: 25.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ForgetScreen()));
-                          },
-                          child: Text(
-                            'Forget Password ?',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
                     ),
                     SizedBox(
                       height: 10.0,

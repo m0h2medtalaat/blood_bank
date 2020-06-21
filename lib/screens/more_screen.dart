@@ -8,6 +8,10 @@ import 'package:bloodbank/screens/aboutapp_screen.dart';
 import 'package:bloodbank/screens/logout_screen.dart';
 
 class MoreScreen extends StatelessWidget {
+  final String apiToken;
+
+  MoreScreen({this.apiToken});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +50,9 @@ class MoreScreen extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => FavScreen()));
+                                        builder: (context) => FavScreen(
+                                              apiToken: apiToken,
+                                            )));
                               },
                             ),
                             MyListTile(

@@ -1,3 +1,4 @@
+import 'package:bloodbank/screens/login_screen.dart';
 import 'package:bloodbank/utilities/constants.dart';
 import 'package:bloodbank/utilities/user.dart';
 import 'package:bloodbank/utilities/user_data.dart';
@@ -248,6 +249,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return RoundedAlert(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
                                             title: "Registration Error",
                                             content:
                                                 'This Email is used before. Try another',
@@ -259,6 +263,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return RoundedAlert(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
                                             title: 'Registration Error',
                                             content:
                                                 'This number is used before. Try another',
@@ -267,7 +274,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   } else {
                                     print(
                                         'Added email = ${_email.text} , pw =${_password.text}');
-                                    Navigator.pop(context);
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LoginScreen()),
+                                      (Route<dynamic> route) => false,
+                                    );
                                   }
                                 }
                               } catch (e) {

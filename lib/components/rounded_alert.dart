@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class RoundedAlert extends StatelessWidget {
   final String title;
   final String content;
+  final Function onPressed;
 
-  RoundedAlert({this.title, this.content});
+  RoundedAlert({this.title, this.content, @required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +47,7 @@ class RoundedAlert extends StatelessWidget {
               SizedBox(
                 width: 120.0,
                 child: RaisedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: onPressed,
                   child: Text(
                     "OK",
                     style: TextStyle(color: Colors.white),
