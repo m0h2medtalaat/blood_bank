@@ -27,8 +27,9 @@ List<SliderModel> getSlides() {
   SliderModel sliderModel = new SliderModel();
 
   //1
-  sliderModel
-      .setDesc("Discover a Food Courner offering the best fast food near you");
+  sliderModel.setDesc(
+    'BloodBank is a Blood Donor App ( BloodBank ) which puts the power to save a lives in the palm of your hand.',
+  );
   sliderModel.setImageAssetPath("resources/slide1.png");
   slides.add(sliderModel);
 
@@ -36,7 +37,8 @@ List<SliderModel> getSlides() {
 
   //2
   sliderModel.setDesc(
-      "Our food plan is filled with delicious seasonal vegetables, whole grains, fast food , burgger , pizza etc.");
+    'BloodBank is a Blood Donor App ( BloodBank ) which puts the power to save a lives in the palm of your hand.',
+  );
   sliderModel.setImageAssetPath("resources/slide2.png");
   slides.add(sliderModel);
 
@@ -44,7 +46,8 @@ List<SliderModel> getSlides() {
 
   //3
   sliderModel.setDesc(
-      "Food delivery or pickup from local restaurants, Explore restaurants that deliver near you.");
+    'The main purpose of BloodLine App is to create & manage a platform for all blood donors of Bangladesh & remove the blood crisis.',
+  );
   sliderModel.setImageAssetPath("resources/slide3.png");
   slides.add(sliderModel);
 
