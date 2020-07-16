@@ -1,3 +1,4 @@
+//flutter build apk --target-platform android-arm,android-arm64,android-x64 --split-per-abi
 import 'package:bloodbank/utilities/db.dart';
 import 'package:bloodbank/utilities/donation.dart';
 import 'package:bloodbank/utilities/user_data.dart';

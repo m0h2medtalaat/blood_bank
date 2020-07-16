@@ -11,7 +11,7 @@ class ContactUsScreen extends StatelessWidget {
         CustomScrollView(
           slivers: <Widget>[
             SliverFixedExtentList(
-              itemExtent: 700.0,
+              itemExtent: 800.0,
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   return Container(
